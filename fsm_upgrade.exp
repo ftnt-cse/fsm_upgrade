@@ -1,0 +1,77 @@
+#!/usr/bin/expect -f
+
+
+set force_conservative 0  ;# set to 1 to force conservative mode even if
+			  ;# script wasn't run conservatively originally
+if {$force_conservative} {
+	set send_slow {1 .1}
+	proc send {ignore arg} {
+		sleep .1
+		exp_send -s -- $arg
+	}
+}
+
+
+set timeout -1
+spawn $env(SHELL)
+match_max 100000
+expect "# "
+send "/pbin/phdownloadimage file:///root/5.2.5.1615/\r"
+expect -exact "\r
+The process to download the upgrade image may take some time and use a considerable amount of bandwidth. Would you like to start the download now? (yes/no) :\r
+"
+send -- "yes\r"
+expect "# "
+send "/pbin/phupgradeimage\r"
+expect "CONDITIONS\]\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect "...\r
+"
+send "\r"
+expect -exact "\r
+15. The warranty disclaimer contained in Sections 11 and 12 of the preceding GPL License is incorporated herein.\r
+\r
+\r
+Fortinet, Inc. - EULA v17 ñ July 2018\r
+\r
+ACCEPT THIS END USER LICENSE AGREEMENT \[y/n\]: "
+send -- "y\r"
+expect -exact "y\r"
+interact
